@@ -15,13 +15,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components//ui/button';
 import { useTransition, useState } from 'react';
 import { Input } from '@/components/ui/input';
-import { login } from '@/lib/actions/login';
-import { LoginSchema } from '@/lib/schemas';
+import { register } from '@/lib/actions/register';
+import { RegisterSchema } from '@/lib/schemas';
 import { useForm } from 'react-hook-form';
 
 import * as z from 'zod';
 
-export const LoginForm = () => {
+export const RegisterForm = () => {
 	// init state
 	const [setError, setIsError] = useState<string | undefined>('');
 	const [setSuccess, setIsSuccess] = useState<string | undefined>('');
@@ -29,21 +29,22 @@ export const LoginForm = () => {
 	const [isPending, startTransition] = useTransition();
 
 	// init form
-	const form = useForm<z.infer<typeof LoginSchema>>({
-		resolver: zodResolver(LoginSchema),
+	const form = useForm<z.infer<typeof RegisterSchema>>({
+		resolver: zodResolver(RegisterSchema),
 		defaultValues: {
 			email: '',
 			password: '',
+			name: '',
 		},
 	});
 
 	// handle submit
-	const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+	const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
 		setIsError('');
 		setIsSuccess('');
 
 		startTransition(() => {
-			login(values).then((data) => {
+			register(values).then((data) => {
 				setIsError(data.error);
 				setIsSuccess(data.success);
 			});
@@ -52,9 +53,9 @@ export const LoginForm = () => {
 
 	return (
 		<CardWrapper
-			headerLabel='Welcome back'
-			backButtonLabel='Don`t have an account?'
-			backButtonHref='/auth/register'
+			headerLabel='Create an Account'
+			backButtonLabel='Already have an account?'
+			backButtonHref='/auth/login'
 			showSocial
 		>
 			<Form {...form}>
@@ -103,13 +104,34 @@ export const LoginForm = () => {
 								</FormItem>
 							)}
 						/>
+
+						{/* Name */}
+						<FormField
+							control={form.control}
+							name='name'
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Name</FormLabel>
+
+									<FormControl>
+										<Input
+											disabled={isPending}
+											{...field}
+											placeholder='John Doe'
+										/>
+									</FormControl>
+
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 					</div>
 
 					<FormError message={setError} />
 					<FormSuccess message={setSuccess} />
 
 					<Button disabled={isPending} type='submit' className='w-full'>
-						Login
+						Register
 					</Button>
 				</form>
 			</Form>
