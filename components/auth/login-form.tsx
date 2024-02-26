@@ -12,6 +12,7 @@ import { CardWrapper } from '@/components/auth/card-wrapper';
 import { FormSuccess } from '@/components/ui/form-success';
 import { FormError } from '@/components/ui/form-error';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components//ui/button';
 import { useTransition, useState } from 'react';
 import { Input } from '@/components/ui/input';
@@ -21,6 +22,13 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
 export const LoginForm = () => {
+	// init searchParams
+	const searchParams = useSearchParams();
+	const urlError =
+		searchParams.get('error') === 'OAuthAccountNotLinked'
+			? 'Email already in use with different provider'
+			: '';
+
 	// init state
 	const [error, setIsError] = useState<string | undefined>('');
 	const [success, setIsSuccess] = useState<string | undefined>('');
@@ -44,8 +52,8 @@ export const LoginForm = () => {
 		startTransition(() => {
 			login(values).then((data) => {
 				setIsError(data?.error);
-				// @ts-ignore
-				setIsSuccess(data?.success);
+				// TODO: add when 2-factor
+				//setIsSuccess(data?.success);
 			});
 		});
 	};
@@ -105,7 +113,7 @@ export const LoginForm = () => {
 						/>
 					</div>
 
-					<FormError message={error} />
+					<FormError message={error || urlError} />
 					<FormSuccess message={success} />
 
 					<Button disabled={isPending} type='submit' className='w-full'>
