@@ -1,7 +1,6 @@
 import { db } from '@/lib/db';
 import NextAuth from 'next-auth';
 import authConfig from '@/auth.config';
-import { UserRole } from '@prisma/client';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { getUserById } from '@/lib/actions/getUserById';
 
@@ -27,7 +26,7 @@ export const {
 			}
 
 			if (token.role && session.user) {
-				session.user.role = token.role as UserRole;
+				session.user.role = token.role;
 			}
 
 			return session;
@@ -44,7 +43,9 @@ export const {
 			return token;
 		},
 	},
+	debug: process.env.NODE_ENV === 'development',
 	adapter: PrismaAdapter(db),
 	session: { strategy: 'jwt' },
 	...authConfig,
+	secret: process.env.NEXTAUTH_SECRET,
 });

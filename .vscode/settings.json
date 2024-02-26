@@ -1,3 +1,5 @@
 {
-	"cSpell.words": ["hookform", "Signin", "trpc"]
+	"cSpell.words": ["hookform", "Signin", "trpc"],
+	"WillLuke.nextjs.addTypesOnSave": true,
+	"WillLuke.nextjs.hasPrompted": true
 }

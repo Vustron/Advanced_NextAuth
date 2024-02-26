@@ -18,13 +18,12 @@ import { Input } from '@/components/ui/input';
 import { login } from '@/lib/actions/login';
 import { LoginSchema } from '@/lib/schemas';
 import { useForm } from 'react-hook-form';
-
 import * as z from 'zod';
 
 export const LoginForm = () => {
 	// init state
-	const [setError, setIsError] = useState<string | undefined>('');
-	const [setSuccess, setIsSuccess] = useState<string | undefined>('');
+	const [error, setIsError] = useState<string | undefined>('');
+	const [success, setIsSuccess] = useState<string | undefined>('');
 	// init transition
 	const [isPending, startTransition] = useTransition();
 
@@ -44,8 +43,9 @@ export const LoginForm = () => {
 
 		startTransition(() => {
 			login(values).then((data) => {
-				setIsError(data.error);
-				setIsSuccess(data.success);
+				setIsError(data?.error);
+				// @ts-ignore
+				setIsSuccess(data?.success);
 			});
 		});
 	};
@@ -105,8 +105,8 @@ export const LoginForm = () => {
 						/>
 					</div>
 
-					<FormError message={setError} />
-					<FormSuccess message={setSuccess} />
+					<FormError message={error} />
+					<FormSuccess message={success} />
 
 					<Button disabled={isPending} type='submit' className='w-full'>
 						Login
