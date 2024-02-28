@@ -1,7 +1,7 @@
 'use client';
 
 import { logout } from '@/lib/actions/logout';
-import { useCurrentUser } from '@/lib/hooks/useCurrentSession';
+import { useCurrentUser } from '@/lib/hooks/useCurrentUser';
 
 const SettingsPage = () => {
 	// get auth
