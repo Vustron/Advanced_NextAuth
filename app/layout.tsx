@@ -1,5 +1,7 @@
-import type { Metadata } from 'next';
+import { SessionProvider } from 'next-auth/react';
 import { Inter } from 'next/font/google';
+import type { Metadata } from 'next';
+import { auth } from '@/auth';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -9,14 +11,19 @@ export const metadata: Metadata = {
 	description: 'Advanced NextAuth',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
-}: Readonly<{
+}: {
 	children: React.ReactNode;
-}>) {
+}) {
+	// init session
+	const session = await auth();
+
 	return (
-		<html lang='en'>
-			<body className={inter.className}>{children}</body>
-		</html>
+		<SessionProvider session={session}>
+			<html lang='en'>
+				<body className={inter.className}>{children}</body>
+			</html>
+		</SessionProvider>
 	);
 }
