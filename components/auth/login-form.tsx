@@ -25,6 +25,7 @@ import * as z from 'zod';
 export const LoginForm = () => {
 	// init searchParams
 	const searchParams = useSearchParams();
+	const callBackUrl = searchParams.get('callBackUrl');
 	const urlError =
 		searchParams.get('error') === 'OAuthAccountNotLinked'
 			? 'Email already in use with different provider'
@@ -52,7 +53,7 @@ export const LoginForm = () => {
 		setIsSuccess('');
 
 		startTransition(() => {
-			login(values)
+			login(values, callBackUrl)
 				.then((data) => {
 					if (data?.error) {
 						form.reset();

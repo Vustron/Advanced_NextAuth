@@ -9,12 +9,12 @@ import { useSearchParams } from 'next/navigation';
 
 export const Social = () => {
 	const searchParams = useSearchParams();
-	const callbackUrl = searchParams.get('callbackUrl');
+	const callBackUrl = searchParams.get('callBackUrl');
 
 	// provider handler
 	const onClick = (provider: 'google' | 'github') => {
 		signIn(provider, {
-			callbackUrl: callbackUrl || DEFAULT_LOGIN_REDIRECT,
+			callbackUrl: callBackUrl || DEFAULT_LOGIN_REDIRECT,
 		});
 	};
 	return (
